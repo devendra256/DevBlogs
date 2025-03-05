@@ -16,6 +16,8 @@ namespace DevBlogs.Web.Models.ViewModels
         public DateTime PublishedDate { get; set; }
         public int TotalLikes { get; set; }
         public bool IsLiked { get; set; }
+        public string CommentDescription { get; set; }
         public ICollection<Tag> Tags { get; set; }
+        public ICollection<BlogComment> Comments { get; set; }
     }
 }

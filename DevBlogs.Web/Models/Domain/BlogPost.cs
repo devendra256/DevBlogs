@@ -14,5 +14,6 @@
         public DateTime PublishedDate { get; set; }
         public ICollection<Tag> Tags { get; set; }
         public ICollection<BlogPostLike> Likes { get; set; }
+        public ICollection<BlogPostComment> BlogPostComments { get; set; }
     }
 }

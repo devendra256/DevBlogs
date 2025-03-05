@@ -1,4 +1,5 @@
 using DevBlogs.Web.Data;
+using DevBlogs.Web.Repository.BlogPostCommentRepository;
 using DevBlogs.Web.Repository.BlogPostLikeRepository;
 using DevBlogs.Web.Repository.BlogPostsRepository;
 using DevBlogs.Web.Repository.CloudinaryRepository;
@@ -34,6 +35,7 @@ builder.Services.AddScoped<IBlogPostLikeRepository, BlogPostLikeRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IImageRepository, CloudinaryImageRepository>();
+builder.Services.AddScoped<IBlogPostCommentRepository, BlogPostCommentRepository>();
 
 var app = builder.Build();
 
