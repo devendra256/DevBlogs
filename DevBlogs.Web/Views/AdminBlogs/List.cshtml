@@ -1,0 +1,48 @@
+﻿@model IEnumerable<DevBlogs.Web.Models.Domain.BlogPost>
+
+<div class="bg-secondary bg-opacity-10 py-3">
+	<div class="container">
+		<h1>All Blog Posts - Admin</h1>
+	</div>
+</div>
+
+<div class="container my-3">
+	@if (Model != null && Model.Any())
+	{
+		<table class="table table-striped border-1">
+			<thead class="bg-dark text-white">
+				<tr>
+					<th>Id</th>
+					<th>Tags</th>
+					<th>Heading</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var blogPost in Model)
+				{
+					<tr>
+						<td>@blogPost.Id</td>
+						<td>
+							@foreach (var tag in blogPost.Tags)
+							{
+								<span class="badge bg-secondary">@tag.Name</span>
+							}
+
+						</td>
+						<td>@blogPost.Heading</td>
+						<td>
+							<a class="btn btn-secondary" asp-area="" asp-controller="AdminBlogs" asp-action="Edit" asp-route-id="@blogPost.Id">Edit</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+
+	}
+	else
+	{
+		<h3>No Blog Post Found ☹️</h3>
+		<a class="btn btn-dark my-2" asp-area="" asp-controller="AdminBlogs" asp-action="Add">Add Blog Post</a>
+	}
+</div>

@@ -1,0 +1,121 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+
+@model DevBlogs.Web.Models.ViewModels.BlogPostViewModel
+
+@{
+	ViewData["Title"] = Model.PageTitle;
+}
+
+<div class="container my-5">
+	<div class="row justify-content-center">
+		<div class="col-12 col-lg-6">
+
+			@if (Model != null)
+			{
+				<h1 class="mb-3">@Model.Heading</h1>
+
+				<div class="d-flex justify-content-between mb-3">
+					<span class="text-secondary">@Model.Author</span>
+					<span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
+				</div>
+
+				<div class="mb-3">
+					@if (signInManager.IsSignedIn(User))
+					{
+						@if (Model.IsLiked)
+						{
+							<a style="cursor: pointer;">
+								<i class="bi bi-hand-thumbs-up-fill"></i>
+							</a>
+						}
+						else
+						{
+							<a id="likeBtn" style="cursor: pointer;">
+								<i class="bi bi-hand-thumbs-up"></i>
+							</a>
+						}
+						<span id="totalLikes">@Model.TotalLikes</span>
+					}
+				</div>
+
+				<div class="mb-3 d-flex">
+					@foreach (var tag in Model.Tags)
+					{
+						<span class="badge bg-secondary me-1">@tag.Name</span>
+					}
+				</div>
+
+				<img src="@Model.FeaturedImageUrl" class="d-block img-fluid mb-3" alt="@Model.UrlHandle" />
+
+				<div class="mb-3 blog-details-content">
+					@Html.Raw(Model.Content);
+				</div>
+
+			}
+			else
+			{
+				<p>Blog Post not found! ☹️</p>
+			}
+
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+
+	<script>
+
+		const likeBtn = document.querySelector('#likeBtn');
+		const totalLikes = document.querySelector('#totalLikes');
+
+		async function getTotalLikes() {
+			const response = await fetch('/api/BlogPostLike/@Model?.Id/totallikes', { method: 'GET' });
+			const data = await response.json();
+			totalLikes.innerHTML = data;
+		}
+
+
+		async function isLiked() {
+			fetch('/api/BlogPostLike/isliked', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': '*'
+				},
+				body: '@userManager.GetUserId(User)'
+			})
+				.then((res) => {
+					console.log("isLiked then", res)
+				})
+				.catch(() => {
+					console.log("isLiked catch")
+				})
+		}
+
+		 async function addLikeForBlog() {
+			 isLiked();
+			fetch('/api/BlogPostLike/Add', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': '*'
+				},
+				body: JSON.stringify({
+					blogPostId: '@Model?.Id',
+					userId: '@userManager.GetUserId(User)'
+				})
+			}).then(() => {
+				likeBtn.innerHTML = `<i class="bi bi-hand-thumbs-up-fill"></i>`;
+				likeBtn.removeEventListener('click', addLikeForBlog);
+				getTotalLikes();
+			})
+			.catch(() => console.log("something went wrong!"))
+		}
+
+		likeBtn.addEventListener('click', addLikeForBlog);
+
+	</script>
+
+}
