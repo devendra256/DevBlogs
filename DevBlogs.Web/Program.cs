@@ -4,6 +4,7 @@ using DevBlogs.Web.Repository.BlogPostLikeRepository;
 using DevBlogs.Web.Repository.BlogPostsRepository;
 using DevBlogs.Web.Repository.CloudinaryRepository;
 using DevBlogs.Web.Repository.TagRepository;
+using DevBlogs.Web.Repository.UserRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +37,7 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IImageRepository, CloudinaryImageRepository>();
 builder.Services.AddScoped<IBlogPostCommentRepository, BlogPostCommentRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

@@ -1,0 +1,94 @@
+﻿@model DevBlogs.Web.Models.ViewModels.UsersViewModel
+
+<div class="bg-secondary bg-opacity-10 py-3">
+	<div class="container">
+		<h1>All Users - Admin</h1>
+	</div>
+</div>
+
+
+
+<div class="container">
+
+	<div class="my-3 d-flex justify-content-end">
+		<button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createUserModal">
+			Create New User
+		</button>
+	</div>
+
+	@if (Model.Users != null && Model.Users.Any())
+	{
+		<table class="table table-striped table-bordered">
+			<thead class="bg-dark text-white">
+				<tr>
+					<th>Id</th>
+					<th>UserName</th>
+					<th>Email</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var user in Model.Users)
+				{
+					<tr>
+						<td>@user.Id</td>
+						<td>@user.UserName</td>
+						<td>@user.Email</td>
+						<td>
+							<a class="btn btn-danger">Delete</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+	else
+	{
+		<p>No Users Found! ☹️</p>
+	}
+</div>
+
+
+<form method="post">
+	<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="createUserModalLabel">Modal title</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-3">
+						<label class="form-label">UserName</label>
+						<input type="text" class="form-control" asp-for="UserName" />
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Email Address</label>
+						<input type="email" class="form-control" asp-for="Email" />
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Password</label>
+						<input type="password" class="form-control" asp-for="Password" />
+					</div>
+					<div class="mb-3">
+						<div class="form-check">
+							<input type="checkbox" id="checkUserRole" class="form-check-input" value="User" checked disabled />
+							<label class="form-label" for="checkUserRole">User Role</label>
+						</div>
+						@if (User.IsInRole("SuperAdmin"))
+						{
+							<div class="form-check">
+								<input type="checkbox" id="checkAdminRole" class="form-check-input" value="Admin" asp-for="AdminRoleCheckbox" />
+								<label class="form-label" for="checkAdminRole">Admin Role</label>
+							</div>
+						}
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Create User</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
