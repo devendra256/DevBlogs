@@ -47,24 +47,37 @@ namespace DevBlogs.Web.Controllers
             };
 
             var identityResult = await _userManager.CreateAsync(identityUser, usersViewModel.Password);
-            if (identityResult != null)
+            if (identityResult != null && identityResult.Succeeded)
             {
-                if (identityResult.Succeeded)
+                var roles = new List<string> { "User" };
+                if (usersViewModel.AdminRoleCheckbox)
                 {
-                    var roles = new List<string> { "User" };
-                    if (usersViewModel.AdminRoleCheckbox)
-                    {
-                        roles.Add("Admin");
-                    }
-                 
-                    identityResult = await _userManager.AddToRolesAsync(identityUser, roles);
-                    if (identityResult != null && identityResult.Succeeded)
-                    {
-                        return RedirectToAction("List", "Users");
-                    }
+                    roles.Add("Admin");
+                }
+
+                identityResult = await _userManager.AddToRolesAsync(identityUser, roles);
+                if (identityResult != null && identityResult.Succeeded)
+                {
+                    return RedirectToAction("List", "Users");
                 }
             }
-            return View();
+            return View(usersViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var identityUser = await _userManager.FindByIdAsync(id.ToString());
+            if (identityUser != null)
+            {
+                // delete user
+                var result = await _userManager.DeleteAsync(identityUser);
+                if (result != null && result.Succeeded)
+                {
+                    return RedirectToAction("List", "Users");
+                }
+            }
+            return RedirectToAction("Add", "AdminTags");
         }
     }
 }

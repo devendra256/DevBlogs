@@ -1,6 +1,7 @@
 ﻿using DevBlogs.Web.Data;
 using DevBlogs.Web.Models.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DevBlogs.Web.Repository.UserRepository

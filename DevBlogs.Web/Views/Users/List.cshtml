@@ -35,7 +35,12 @@
 						<td>@user.UserName</td>
 						<td>@user.Email</td>
 						<td>
-							<a class="btn btn-danger">Delete</a>
+							<form method="post"
+								  asp-controller="Users"
+								  asp-action="Delete"
+								  asp-route-id="@user.Id">
+								<button class="btn btn-danger" type="submit">Delete</button>
+							</form>
 						</td>
 					</tr>
 				}
@@ -78,7 +83,7 @@
 						@if (User.IsInRole("SuperAdmin"))
 						{
 							<div class="form-check">
-								<input type="checkbox" id="checkAdminRole" class="form-check-input" value="Admin" asp-for="AdminRoleCheckbox" />
+								<input type="checkbox" id="checkAdminRole" class="form-check-input" value="Admin" asp-for="AdminRoleCheckbox" checked />
 								<label class="form-label" for="checkAdminRole">Admin Role</label>
 							</div>
 						}
