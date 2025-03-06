@@ -32,9 +32,17 @@ namespace DevBlogs.Web.Repository.TagRepository
             return null;
         }
 
-        public async Task<IEnumerable<Tag>> GetAllAsync()
+        public async Task<IEnumerable<Tag>> GetAllAsync(string? searchTerm = null)
         {
-            return await _devBlogsDbContext.Tags.ToListAsync();
+            var query = _devBlogsDbContext.Tags.AsQueryable();
+
+            // filtering
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(x => x.Name.Contains(searchTerm) || x.DisplayName.Contains(searchTerm));
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Tag?> GetAsync(Guid id)

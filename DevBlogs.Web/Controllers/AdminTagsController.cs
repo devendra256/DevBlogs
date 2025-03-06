@@ -25,6 +25,11 @@ namespace DevBlogs.Web.Controllers
         [ActionName("Add")]
         public async Task<IActionResult> AddAsync(AddTagRequest addTagRequest)
         {
+            ValidateTagNames(addTagRequest);
+            if (ModelState.IsValid == false)
+            {
+                return View();
+            }
             Tag tag = new Tag
             {
                 Name = addTagRequest.Name,
@@ -37,9 +42,12 @@ namespace DevBlogs.Web.Controllers
 
         [HttpGet]
         [ActionName("List")]
-        public async Task<IActionResult> ListAsync()
+        public async Task<IActionResult> ListAsync(string? searchQuery)
         {
-            return View(await _tagRepository.GetAllAsync());
+            ViewBag.SearchQuery = searchQuery;
+
+            var tags = await _tagRepository.GetAllAsync(searchQuery);
+            return View(tags);
         }
 
         [HttpGet]
@@ -86,6 +94,17 @@ namespace DevBlogs.Web.Controllers
                 return RedirectToAction("List");
             }
             return RedirectToAction("Edit", new { id = Id });
+        }
+
+        public void ValidateTagNames(AddTagRequest addTagRequest)
+        {
+            if (addTagRequest.Name is not null && addTagRequest.DisplayName is not null)
+            {
+                if (addTagRequest.Name == addTagRequest.DisplayName)
+                {
+                    ModelState.AddModelError("DisplayName", "Tag DisplayName can not be same as the Tag Name!");
+                }
+            }
         }
     }
 }

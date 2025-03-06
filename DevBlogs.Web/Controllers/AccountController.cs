@@ -24,19 +24,22 @@ namespace DevBlogs.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
-            var user = new IdentityUser
+            if (ModelState.IsValid)
             {
-                UserName = registerViewModel.Username,
-                Email = registerViewModel.Email,
-            };
-            var identityUserResult = await _userManager.CreateAsync(user, registerViewModel.Password);
-            if (identityUserResult.Succeeded)
-            {
-                var userRoleResult = await _userManager.AddToRoleAsync(user, "User");
-                if (userRoleResult.Succeeded)
+                var user = new IdentityUser
                 {
-                    // success
-                    return RedirectToAction("Register");
+                    UserName = registerViewModel.Username,
+                    Email = registerViewModel.Email,
+                };
+                var identityUserResult = await _userManager.CreateAsync(user, registerViewModel.Password);
+                if (identityUserResult.Succeeded)
+                {
+                    var userRoleResult = await _userManager.AddToRoleAsync(user, "User");
+                    if (userRoleResult.Succeeded)
+                    {
+                        // success
+                        return RedirectToAction("Register");
+                    }
                 }
             }
             return View();

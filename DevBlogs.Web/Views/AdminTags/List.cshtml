@@ -6,9 +6,19 @@
 	</div>
 </div>
 
+<form method="get" asp-area="" asp-controller="AdminTags" asp-action="List">
+	<div class="container mt-3">
+		<div class="row">
+			<div class="col col-md-3 d-flex">
+				<input type="text" class="form-control" name="searchQuery" value="@ViewBag.SearchQuery" />
+				<button type="submit" class="btn btn-success ms-3">Search</button>
+			</div>
+		</div>
+	</div>
+</form>
 
-<div class="container my-3">
-	@if (Model == null || Model.Any())
+<div class="container mt-3">
+	@if (Model != null && Model.Any())
 	{
 		<table class="table table-striped border border-1">
 			<thead class="bg-dark text-white">
