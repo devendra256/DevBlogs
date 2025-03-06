@@ -32,7 +32,8 @@ namespace DevBlogs.Web.Repository.TagRepository
             return null;
         }
 
-        public async Task<IEnumerable<Tag>> GetAllAsync(string? searchTerm = null)
+        public async Task<IEnumerable<Tag>> GetAllAsync(string? searchTerm = null,
+            string? sortBy = null, string? sortDirection = null)
         {
             var query = _devBlogsDbContext.Tags.AsQueryable();
 
@@ -40,6 +41,21 @@ namespace DevBlogs.Web.Repository.TagRepository
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 query = query.Where(x => x.Name.Contains(searchTerm) || x.DisplayName.Contains(searchTerm));
+            }
+
+            // sorting
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                var isDesc = string.Equals(sortDirection, "Desc", StringComparison.OrdinalIgnoreCase);
+
+                if (string.Equals(sortBy, "Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name);
+                }
+                if (string.Equals(sortBy, "DisplayName", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDesc ? query.OrderByDescending(x => x.DisplayName) : query.OrderBy(x => x.Name);
+                }
             }
 
             return await query.ToListAsync();

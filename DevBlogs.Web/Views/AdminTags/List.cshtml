@@ -21,11 +21,59 @@
 	@if (Model != null && Model.Any())
 	{
 		<table class="table table-striped border border-1">
-			<thead class="bg-dark text-white">
+			<thead>
 				<tr>
 					<th>Id</th>
-					<th>Name</th>
-					<th>Display Name</th>
+					<th>
+						Name
+						<span>
+							<span>
+								<a class="btn btn-sm"
+								   asp-controller="AdminTags"
+								   asp-action="List"
+								   asp-route-sortBy="Name"
+								   asp-route-sortDirection="Asc"
+								   asp-route-searchQuery="@ViewBag.SearchQuery">
+									<i class="bi bi-arrow-up"></i>
+								</a>
+							</span>
+							<span>
+								<a class="btn btn-sm"
+								   asp-controller="AdminTags"
+								   asp-action="List"
+								   asp-route-sortBy="Name"
+								   asp-route-sortDirection="Desc"
+								   asp-route-searchQuery="@ViewBag.SearchQuery">
+									<i class="bi bi-arrow-down"></i>
+								</a>
+							</span>
+						</span>
+					</th>
+					<th>
+						Display Name
+						<span>
+							<span>
+								<a class="btn btn-sm"
+									asp-controller="AdminTags"
+								   asp-action="List"
+								   asp-route-sortBy="DisplayName"
+								   asp-route-sortDirection="Asc"
+								   asp-route-searchQuery="@ViewBag.SearchQuery">
+									<i class="bi bi-arrow-up"></i>
+								</a>
+							</span>
+							<span>
+								<a class="btn btn-sm"
+									asp-controller="AdminTags"
+								   asp-action="List"
+								   asp-route-sortBy="DisplayName"
+								   asp-route-sortDirection="Desc"
+								   asp-route-searchQuery="@ViewBag.SearchQuery">
+									<i class="bi bi-arrow-down"></i>
+								</a>
+							</span>
+						</span>
+						</th>
 					<th>Action</th>
 				</tr>
 			</thead>
